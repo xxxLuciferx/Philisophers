@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/06 19:17:29 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/06 22:46:29 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,55 +52,48 @@ int	parsing(int argc, char **argv, t_tools *philo)
 	}
 	return (0);
 }
-// void	ft_sleep(t_philo *philo)
-// {
-// 	int time;
 
-// 	time = philo->tools->time_sleep;
-// 	struct timeval start;
-// 	struct timeval end;
-// 	gettimeofday(&start, NULL);
-// 	while (1)
-// 	{
-// 		if(gettimeofday(&end, NULL) > start)
-// 			printf("hello\n");
-// 	}		
-// }
+void	ft_sleep(int time)
+{
+	struct timeval start;
+	struct timeval end;
+	gettimeofday(&start, NULL);
+	gettimeofday(&end, NULL);
+	while (((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec - start.tv_usec) / 1000) != time)
+		gettimeofday(&end, NULL);
+	// printf("=========> %ld\n", (end.tv_sec * 1000 + end.tv_usec / 1000) - (start.tv_sec * 1000 + start.tv_usec / 1000) - time);
+}
+
+//printing
+void	printer(t_philo *philo, char *line)
+{
+	gettimeofday(&philo->t_now, 0);
+	printf("%ld %d %s\n", (philo->t_now.tv_sec - philo->t_0.tv_sec) * 1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec) / 1000, philo->id, line);
+}
+
 void	*routine(void	*arg)
 {
 	t_philo *philo = (t_philo *)arg;
-	if (philo->id % 2 != 1)
+	if (philo->id % 2 == 1)
 	{
-		gettimeofday(&philo->t_now, 0);
-		printf("%ld %d is thinking\n", (philo->t_now.tv_sec - philo->t_0.tv_sec)*1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec)/1000, philo->id);
-		usleep(philo->tools->time_eat * 1000);
-		// ft_sleep(philo);
+		printer(philo, "is thinking");
+		ft_sleep(philo->tools->time_sleep);
 	}
 	while(philo->tools->eat_number > philo->n_meal)
 	{
 		pthread_mutex_lock(&philo->tools->forks[philo->left_fork]);
 		pthread_mutex_lock(&philo->tools->forks[philo->right_fork]);
-		gettimeofday(&philo->t_now, 0);
-		printf("%ld %d has taken a fork\n", (philo->t_now.tv_sec - philo->t_0.tv_sec)*1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec)/1000, philo->id);
-		printf("%ld %d is eating\n", (philo->t_now.tv_sec - philo->t_0.tv_sec)*1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec)/1000, philo->id);
-		// philo->t_meal++;
-		usleep(philo->tools->time_eat * 1000);
+		printer(philo, "has taken a fork");
+		printer(philo, "is eating");
+		ft_sleep(philo->tools->time_eat);
 		philo->n_meal++;
-		// philo->tools->eat_number--;
-		// printf("----------%d\n",philo->n_meal);
 		pthread_mutex_unlock(&philo->tools->forks[philo->right_fork]);
 		pthread_mutex_unlock(&philo->tools->forks[philo->left_fork]);
-		gettimeofday(&philo->t_now, 0);
-		// if(philo->tools->eat_number <= philo->n_meal)
-		// 	break;
-		printf("%ld %d is sleeping\n", (philo->t_now.tv_sec - philo->t_0.tv_sec)*1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec)/1000, philo->id);
-		usleep(philo->tools->time_sleep * 1000);
+		printer(philo, "is sleeping");
+		ft_sleep(philo->tools->time_sleep);
+		printer(philo, "is thinking");
 
-		gettimeofday(&philo->t_now, 0);
-		printf("%ld %d is thinking\n", (philo->t_now.tv_sec - philo->t_0.tv_sec)*1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec)/1000, philo->id);
 	}
-	// printf(">>>>> %d\n", philo->tools->eat_number);
-	// exit(0);
 	return(NULL);
 }
 
@@ -119,12 +112,14 @@ int init_philo(t_tools *tools)
 		tools->philo[i].left_fork = i;
 		tools->philo[i].n_meal = 0;
 		gettimeofday(&tools->philo[i].t_0, 0);
+		// printf("%ld\n", tools->philo[i].t_0.tv_sec * 1000 + tools->philo[i].t_0.tv_usec / 1000);
 		if(i > 0)
 			tools->philo[i].right_fork = tools->philo[i - 1].id - 1;
 		else
 			tools->philo[i].right_fork = tools->n_philos - 1;
 		i++;
 	}
+	// exit(0);
 	return(0);
 }
 
@@ -164,8 +159,7 @@ int	mutexes_and_threads(t_tools *tools)
 int main(int argc, char **argv)
 {
 	t_tools		*tools;
-	// exit(0);
-	// while(1);
+	
 	if(argc != 5 && argc != 6)
 		return (1);
 	tools = malloc(sizeof(t_tools) * 1);
@@ -173,10 +167,6 @@ int main(int argc, char **argv)
 		return (1);
 	if(init_philo(tools) || mutexes_and_threads(tools))
 		return (1);
-
-	// arg->forks = calloc(sizeof(pthread_mutex_t) , arg->n_philos);
-	// if(!arg->forks)
-	// 	return (1);
 
 	return(0);
 }
