@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/05/26 00:09:41 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/05 20:55:18 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	int 			left_fork;
 	int				right_fork;
-	int				meal_numbers;
+	int				n_meal;
 	struct timeval	t_0;
 	struct timeval	t_now;
 }t_philo;
