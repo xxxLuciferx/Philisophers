@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/06 22:46:29 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/08 16:49:32 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	ft_sleep(int time)
 void	printer(t_philo *philo, char *line)
 {
 	gettimeofday(&philo->t_now, 0);
-	printf("%ld %d %s\n", (philo->t_now.tv_sec - philo->t_0.tv_sec) * 1000 + (philo->t_now.tv_usec - philo->t_0.tv_usec) / 1000, philo->id, line);
+	// printf("%ld\n", ((philo->t_now.tv_sec - philo->tools->t_0.tv_sec) * 1000 ) + (philo->t_now.tv_usec - philo->tools->t_0.tv_usec) / 1000);
+	printf("%ld %d %s\n", (philo->t_now.tv_sec - philo->tools->t_0.tv_sec) * 1000 + (philo->t_now.tv_usec - philo->tools->t_0.tv_usec) / 1000, philo->id, line);
 }
 
 void	*routine(void	*arg)
@@ -105,13 +106,13 @@ int init_philo(t_tools *tools)
 	tools->philo = malloc(sizeof(t_philo) * tools->n_philos);
 	if(!tools->philo)
 		return (1);
+	gettimeofday(&tools->t_0, 0);
 	while (i < tools->n_philos)
 	{
 		tools->philo[i].id = i + 1;
 		tools->philo[i].tools = tools;
 		tools->philo[i].left_fork = i;
 		tools->philo[i].n_meal = 0;
-		gettimeofday(&tools->philo[i].t_0, 0);
 		// printf("%ld\n", tools->philo[i].t_0.tv_sec * 1000 + tools->philo[i].t_0.tv_usec / 1000);
 		if(i > 0)
 			tools->philo[i].right_fork = tools->philo[i - 1].id - 1;
