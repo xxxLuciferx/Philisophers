@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/08 16:49:32 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/08 20:28:06 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,13 @@ void	ft_sleep(int time)
 	// printf("=========> %ld\n", (end.tv_sec * 1000 + end.tv_usec / 1000) - (start.tv_sec * 1000 + start.tv_usec / 1000) - time);
 }
 
-//printing
 void	printer(t_philo *philo, char *line)
 {
 	gettimeofday(&philo->t_now, 0);
 	// printf("%ld\n", ((philo->t_now.tv_sec - philo->tools->t_0.tv_sec) * 1000 ) + (philo->t_now.tv_usec - philo->tools->t_0.tv_usec) / 1000);
 	printf("%ld %d %s\n", (philo->t_now.tv_sec - philo->tools->t_0.tv_sec) * 1000 + (philo->t_now.tv_usec - philo->tools->t_0.tv_usec) / 1000, philo->id, line);
+	if(line[3] == 'e')
+		gettimeofday(&philo->last_eat, 0);
 }
 
 void	*routine(void	*arg)
@@ -93,7 +94,11 @@ void	*routine(void	*arg)
 		printer(philo, "is sleeping");
 		ft_sleep(philo->tools->time_sleep);
 		printer(philo, "is thinking");
-
+		if(((philo->last_eat.tv_sec - philo->t_now.tv_sec) * 1000 + (philo->last_eat.tv_usec - philo->t_now.tv_usec) / 1000) > philo->tools->time_die)
+		{
+			printer(philo, "is died");
+			break;
+		}
 	}
 	return(NULL);
 }
@@ -113,6 +118,7 @@ int init_philo(t_tools *tools)
 		tools->philo[i].tools = tools;
 		tools->philo[i].left_fork = i;
 		tools->philo[i].n_meal = 0;
+		gettimeofday(&tools->philo->last_eat, 0);
 		// printf("%ld\n", tools->philo[i].t_0.tv_sec * 1000 + tools->philo[i].t_0.tv_usec / 1000);
 		if(i > 0)
 			tools->philo[i].right_fork = tools->philo[i - 1].id - 1;

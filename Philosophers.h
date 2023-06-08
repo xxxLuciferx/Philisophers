@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/08 16:48:30 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/08 20:14:38 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_philo
 	int				right_fork;
 	int				n_meal;
 	struct timeval	t_now;
+	struct timeval	last_eat;
 }t_philo;
 
 #endif
