@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/09 17:59:47 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/09 23:33:32 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,8 @@ typedef struct s_philo
 	struct timeval	t_0;
 	struct timeval	t_now;
 }t_philo;
+
+int	parsing(int argc, char **argv, t_tools *philo);
+
 
 #endif

@@ -6,52 +6,11 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/09 18:09:53 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/09 23:40:57 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Philosophers.h"
-
-
-int		ft_atoi(char *str)
-{
-	int i;
-	int result;
-
-	i = -1;
-	result = 0;
-	while (str && str[++i] == ' ');
-	while (str && (str[i] >= '0' && str[i] <= '9'))
-	{
-		result *= 10;
-		result = result + (str[i] - '0');
-		i++;
-	}
-	return (result);
-}
-
-int	parsing(int argc, char **argv, t_tools *philo)
-{
-	philo->n_philos = ft_atoi(argv[1]);
-	// printf("%d ", philo->n_philos);
-	philo->time_die = ft_atoi(argv[2]);
-	// printf("%d ", philo->time_die);
-	philo->time_eat = ft_atoi(argv[3]);
-	// printf("%d ", philo->time_eat);
-	philo->time_sleep = ft_atoi(argv[4]);
-	// printf("%d ", philo->time_sleep);
-	if(argc == 6)
-		philo->eat_number = ft_atoi(argv[5]);
-	else
-		philo->eat_number = -1;
-	// printf("%d \n", philo->eat_number);
-	if(philo->n_philos == 0 || philo->time_die < 60 || philo->time_eat < 60 || philo->time_sleep < 60 || philo->eat_number == 0)
-	{
-		printf("Incorrect Argument\nPlease enter valid tools.\n");
-		return (1);
-	}
-	return (0);
-}
 
 void	ft_sleep(int time)
 {
@@ -61,17 +20,19 @@ void	ft_sleep(int time)
 	gettimeofday(&start, NULL);
 	gettimeofday(&end, NULL);
 
-	while (((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec - start.tv_usec) / 1000) < time)
+	while (1)
 	{
-		usleep(250);
+		if(((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec - start.tv_usec) / 1000) == time)
+			break;
 		gettimeofday(&end, NULL);
+		usleep(70);
 	}
+	// usleep(150);
 }
 
 void	printer(t_philo *philo, char *line)
 {
 	gettimeofday(&philo->t_now, 0);
-	// printf("%ld\n", ((philo->t_now.tv_sec - philo->tools->t_0.tv_sec) * 1000 ) + (philo->t_now.tv_usec - philo->tools->t_0.tv_usec) / 1000);
 	printf("%ld %d %s\n", (philo->t_now.tv_sec*1000 + philo->t_now.tv_usec/1000) - (philo->t_0.tv_sec*1000 + philo->t_0.tv_usec/1000), philo->id, line);
 	if(line[3] == 'e')
 		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
@@ -93,7 +54,7 @@ void	*routine(void	*arg)
 		printer(philo, "is thinking");
 		ft_sleep(philo->tools->time_sleep);
 	}
-	while(1) /*philo->tools->eat_number > philo->n_meal*/
+	while(1)
 	{
 		if(philo->tools->eat_number != philo->n_meal && philo->tools->n_philos > 1)
 		{	
@@ -120,7 +81,6 @@ int init_philo(t_tools *tools)
 
 	tools->philo = malloc(sizeof(t_philo) * tools->n_philos);
 	tools->last_eat = malloc(sizeof(struct timeval)*tools->n_philos);
-	// tools->t_0 = malloc(sizeof(struct timeval)*tools->n_philos);   
 	if(!tools->philo)
 		return (1);
 	while (i < tools->n_philos)
@@ -163,7 +123,7 @@ int	mutexes_and_threads(t_tools *tools)
 	i = 0;
 	while(1)
 	{
-		if (timer(&tools->philo[i]) > tools->time_die || tools->n_philos == 1)
+		if (timer(&tools->philo[i]) > tools->time_die + 10|| tools->n_philos == 1)
 		{
 			printer(&tools->philo[i], "is died");
 			return 0;
@@ -171,7 +131,7 @@ int	mutexes_and_threads(t_tools *tools)
 		else if(tools->philo->n_meal == tools->eat_number)
 			return 0;
 		i++;
-		if(i == tools->n_philos)
+		if (i == tools->n_philos)
 			i = 0;
 	}
 	return (0);
@@ -189,5 +149,5 @@ int main(int argc, char **argv)
 	if(init_philo(tools) || mutexes_and_threads(tools))
 		return (1);
 
-	return(0);
+	return (0);
 }
