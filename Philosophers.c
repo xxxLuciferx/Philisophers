@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/10 16:58:52 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/10 17:49:06 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,23 @@ void	ft_sleep(int time)
 
 void	printer(t_philo *philo, char *line)
 {
+	pthread_mutex_t	*print;
+	
+	print = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_lock(print);
 	gettimeofday(&philo->t_now, 0);
 	printf("%ld %d %s\n", (philo->t_now.tv_sec * 1000 + \
-	philo->t_now.tv_usec / 1000) - (philo->t_0.tv_sec * \
-	1000 + philo->t_0.tv_usec / 1000), philo->id, line);
+	philo->t_now.tv_usec / 1000) - (philo->tools->t_start.tv_sec * \
+	1000 + philo->tools->t_start.tv_usec / 1000), philo->id, line);
 	if (line[3] == 'e')
 	{
+		usleep(10);
 		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
 		philo->n_meal++;
 	}
 	if (line[3] == 't')
 		ft_sleep(philo->tools->time_sleep);
+	pthread_mutex_unlock(print);
 }
 
 int	timer(t_philo *philo)
