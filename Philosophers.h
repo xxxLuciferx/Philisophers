@@ -6,47 +6,53 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/09 23:33:32 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/10 17:01:22 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PHILOSOPHERS_H
+# define PHILOSOPHERS_H
 
-#ifndef PHILOSOPHERS
-# define	PHILOSOPHERS
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <unistd.h>
 
-#include <unistd.h>
-#include <stdio.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h>
-
-typedef struct s_philo t_philo;
+typedef struct s_philo	t_philo;
 
 typedef struct s_tools
 {
-	t_philo	*philo;
-	int n_philos;
-	int time_die;
-	int time_eat;
-	int time_sleep;
-	int eat_number;
-	pthread_mutex_t *forks;
-	struct timeval	*last_eat;
-}t_tools;
+	t_philo				*philo;
+	int					n_philos;
+	int					time_die;
+	int					time_eat;
+	int					time_sleep;
+	int					eat_number;
+	pthread_mutex_t		*forks;
+	struct timeval		*last_eat;
+}						t_tools;
 
 typedef struct s_philo
 {
-	t_tools 		*tools;
-	int 			id;
-	pthread_t		thread;
-	int 			left_fork;
-	int				right_fork;
-	int				n_meal;
-	struct timeval	t_0;
-	struct timeval	t_now;
-}t_philo;
+	t_tools				*tools;
+	int					id;
+	pthread_t			thread;
+	int					left_fork;
+	int					right_fork;
+	int					n_meal;
+	struct timeval		t_0;
+	struct timeval		t_now;
+}						t_philo;
 
-int	parsing(int argc, char **argv, t_tools *philo);
-
+int						ft_atoi(char *str);
+int						parsing(int argc, char **argv, t_tools *philo);
+int						init_philo(t_tools *tools);
+int						mutexes_and_threads(t_tools *tools);
+void					ft_sleep(int time);
+void					printer(t_philo *philo, char *line);
+int						timer(t_philo *philo);
+void					check_died(t_tools *tools);
+void					*routine(void *arg);
 
 #endif
