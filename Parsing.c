@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 23:30:08 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/10 17:47:00 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:44:09 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	parsing(int argc, char **argv, t_tools *philo)
 	if (philo->n_philos == 0 || philo->time_die < 60 || philo->time_eat < 60
 		|| philo->time_sleep < 60 || philo->eat_number == 0)
 	{
-		printf("Incorrect Argument\nPlease enter valid tools.\n");
+		printf("Incorrect Argument\nPlease enter valid numbers.\n");
 		return (1);
 	}
 	return (0);
@@ -58,7 +58,7 @@ int	init_philo(t_tools *tools)
 	i = 0;
 	tools->philo = malloc(sizeof(t_philo) * tools->n_philos);
 	tools->last_eat = malloc(sizeof(struct timeval) * tools->n_philos);
-	if (!tools->philo)
+	if (!tools->philo || !tools->last_eat)
 		return (1);
 	gettimeofday(&tools->t_start, 0);
 	while (i < tools->n_philos)
@@ -83,7 +83,6 @@ int	mutexes_and_threads(t_tools *tools)
 
 	i = 0;
 	tools->forks = malloc(sizeof(pthread_mutex_t) * tools->n_philos);
-	
 	if (!tools->forks)
 		return (1);
 	while (i < tools->n_philos)

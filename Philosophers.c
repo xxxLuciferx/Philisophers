@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/10 17:53:43 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/13 10:50:08 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,35 @@ void	ft_sleep(int time)
 	gettimeofday(&end, NULL);
 	while (1)
 	{
-		if (((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec
-					- start.tv_usec) / 1000) == time)
+		if (((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec - start.tv_usec) / 1000) >= time)
 			break ;
 		gettimeofday(&end, NULL);
-		usleep(10);
+		usleep(150);
 	}
 }
-
+int	time_calcule(t_philo *philo)
+{
+	int time;
+	
+	gettimeofday(&philo->t_now, 0);
+	time = (philo->t_now.tv_sec * 1000 + philo->t_now.tv_usec / 1000) - (philo->tools->t_start.tv_sec * \
+	1000 + philo->tools->t_start.tv_usec / 1000);
+	return (time);
+}
 void	printer(t_philo *philo, char *line)
 {
 	// pthread_mutex_t	*print;
 	
 	// print = malloc(sizeof(pthread_mutex_t));
 	// pthread_mutex_lock(print);
-	gettimeofday(&philo->t_now, 0);
-	printf("%ld %d %s\n", (philo->t_now.tv_sec * 1000 + \
-	philo->t_now.tv_usec / 1000) - (philo->tools->t_start.tv_sec * \
-	1000 + philo->tools->t_start.tv_usec / 1000), philo->id, line);
+	
+	printf("%d %d %s\n", time_calcule(philo), philo->id, line);
 	if (line[3] == 'e')
 	{
 		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
 		philo->n_meal++;
 		// usleep(10);
 	}
-	if (line[3] == 't')
-		ft_sleep(philo->tools->time_sleep);
 	// pthread_mutex_unlock(print);
 	// pthread_mutex_destroy(print);
 }
@@ -54,13 +57,23 @@ void	printer(t_philo *philo, char *line)
 int	timer(t_philo *philo)
 {
 	struct timeval	time;
-
+	int timing;
 	gettimeofday(&time, 0);
-	return (((time.tv_sec * 1000) + (time.tv_usec / 1000))
-		- ((philo->tools->last_eat[philo->id - 1].tv_sec * 1000)
-			+ (philo->tools->last_eat[philo->id - 1].tv_usec / 1000)));
+	timing = ((time.tv_sec * 1000) + (time.tv_usec / 1000)) - ((philo->tools->last_eat[philo->id - 1].tv_sec * 1000) + (philo->tools->last_eat[philo->id - 1].tv_usec / 1000));
+	return (timing);
 }
+void	p_join(t_tools *tools)
+{
+	int i;
 
+	i = 0;
+	while (i < tools->n_philos)
+	{
+		pthread_join(tools->philo[i].thread, 0);
+		i++;
+	}
+	
+}
 void	check_died(t_tools *tools)
 {
 	int	i;
@@ -68,8 +81,7 @@ void	check_died(t_tools *tools)
 	i = 0;
 	while (1)
 	{
-		if (timer(&tools->philo[i]) > tools->time_die + 10
-			|| tools->n_philos == 1)
+		if (timer(&tools->philo[i]) >= tools->time_die)
 		{
 			printer(&tools->philo[i], "is died");
 			return ;
@@ -80,6 +92,7 @@ void	check_died(t_tools *tools)
 		if (i == tools->n_philos)
 			i = 0;
 	}
+	p_join(tools);
 }
 
 int	main(int argc, char **argv)
@@ -91,6 +104,7 @@ int	main(int argc, char **argv)
 	tools = malloc(sizeof(t_tools) * 1);
 	if (!tools || parsing(argc, argv, tools))
 		return (1);
+	
 	if (init_philo(tools) || mutexes_and_threads(tools))
 		return (1);
 	return (0);
