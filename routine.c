@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 15:29:16 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/13 10:42:14 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 21:32:19 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 == 1)
+	{
 		printer(philo, "is thinking");
+		ft_sleep(philo->tools->time_sleep);
+	}
 	while (1)
 	{
 		if (philo->tools->eat_number != philo->n_meal)
