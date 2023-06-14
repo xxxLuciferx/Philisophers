@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 23:30:08 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/13 10:44:09 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 22:37:06 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	init_philo(t_tools *tools)
 		tools->philo[i].tools = tools;
 		tools->philo[i].left_fork = i;
 		tools->philo[i].n_meal = 0;
+		tools->philo[i].died = 0;
 		gettimeofday(&tools->last_eat[i], 0);
 		if (i > 0)
 			tools->philo[i].right_fork = tools->philo[i - 1].id - 1;
@@ -83,6 +84,10 @@ int	mutexes_and_threads(t_tools *tools)
 
 	i = 0;
 	tools->forks = malloc(sizeof(pthread_mutex_t) * tools->n_philos);
+	tools->printing = malloc(sizeof(pthread_mutex_t));
+	tools->death = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(tools->printing, NULL);
+	pthread_mutex_init(tools->death, NULL);
 	if (!tools->forks)
 		return (1);
 	while (i < tools->n_philos)
@@ -98,6 +103,5 @@ int	mutexes_and_threads(t_tools *tools)
 			return (1);
 		i++;
 	}
-	check_died(tools);
 	return (0);
 }

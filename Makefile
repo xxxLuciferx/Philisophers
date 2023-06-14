@@ -4,7 +4,7 @@ SRC = Philosophers.c Parsing.c routine.c
 
 
 ####### ADD FLAGS
-CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=thread -g
 # CFLAGS = -fsanitize=address -g -fsanitize=thread
 
 OBJ = ${SRC:.c=.o}

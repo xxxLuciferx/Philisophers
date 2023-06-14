@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/13 10:50:08 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 23:14:03 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,34 +24,28 @@ void	ft_sleep(int time)
 		if (((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec - start.tv_usec) / 1000) >= time)
 			break ;
 		gettimeofday(&end, NULL);
-		usleep(150);
+		usleep(200);
 	}
 }
 int	time_calcule(t_philo *philo)
 {
-	int time;
+	// int time;
 	
 	gettimeofday(&philo->t_now, 0);
-	time = (philo->t_now.tv_sec * 1000 + philo->t_now.tv_usec / 1000) - (philo->tools->t_start.tv_sec * \
-	1000 + philo->tools->t_start.tv_usec / 1000);
-	return (time);
+
+	return ((philo->t_now.tv_sec * 1000 + philo->t_now.tv_usec / 1000) - (philo->tools->t_start.tv_sec * \
+	1000 + philo->tools->t_start.tv_usec / 1000));
 }
 void	printer(t_philo *philo, char *line)
 {
-	// pthread_mutex_t	*print;
-	
-	// print = malloc(sizeof(pthread_mutex_t));
-	// pthread_mutex_lock(print);
-	
 	printf("%d %d %s\n", time_calcule(philo), philo->id, line);
 	if (line[3] == 'e')
 	{
 		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
+		pthread_mutex_lock(philo->tools->printing);
 		philo->n_meal++;
-		// usleep(10);
+		pthread_mutex_unlock(philo->tools->printing);
 	}
-	// pthread_mutex_unlock(print);
-	// pthread_mutex_destroy(print);
 }
 
 int	timer(t_philo *philo)
@@ -74,6 +68,37 @@ void	p_join(t_tools *tools)
 	}
 	
 }
+
+void	make_all_dead(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo->tools->n_philos)
+	{
+		pthread_mutex_lock(philo->tools->death);
+		philo[i].died = 1;
+		pthread_mutex_unlock(philo->tools->death);
+		i++;
+	}
+}
+int	all_good(t_tools *tools)
+{
+	int	i;
+
+	i = 0;
+	if (tools->eat_number <= 0)
+		return (0);
+	while (i < tools->n_philos)
+	{
+		if (tools->philo[i].n_meal <= tools->eat_number)
+		{
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
 void	check_died(t_tools *tools)
 {
 	int	i;
@@ -81,18 +106,21 @@ void	check_died(t_tools *tools)
 	i = 0;
 	while (1)
 	{
+		pthread_mutex_lock(tools->printing);
+		if(all_good(tools) == 1)
+			return ;
+		pthread_mutex_unlock(tools->printing);
 		if (timer(&tools->philo[i]) >= tools->time_die)
 		{
-			printer(&tools->philo[i], "is died");
+			pthread_mutex_lock(tools->printing);
+			printer(&tools->philo[i], "died");
+			make_all_dead(tools->philo);
 			return ;
 		}
-		else if (tools->philo->n_meal == tools->eat_number)
-			return ;
 		i++;
 		if (i == tools->n_philos)
 			i = 0;
 	}
-	p_join(tools);
 }
 
 int	main(int argc, char **argv)
@@ -107,5 +135,6 @@ int	main(int argc, char **argv)
 	
 	if (init_philo(tools) || mutexes_and_threads(tools))
 		return (1);
+	check_died(tools);
 	return (0);
 }

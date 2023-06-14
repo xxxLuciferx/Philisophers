@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/13 10:46:17 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 22:36:43 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@ typedef struct s_tools
 	int					time_sleep;
 	int					eat_number;
 	pthread_mutex_t		*forks;
+	pthread_mutex_t		*printing;
+	pthread_mutex_t		*death;
 	struct timeval		t_start;
 	struct timeval		*last_eat;
 }						t_tools;
 
 typedef struct s_philo
 {
+	int					died;
 	t_tools				*tools;
 	pthread_t			thread;
 	int					id;
