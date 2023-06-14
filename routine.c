@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 15:29:16 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/14 23:20:41 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 23:25:39 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+ 
 	if (philo->id % 2 == 1)
 	{
 		printer(philo, "is thinking");
@@ -29,7 +30,7 @@ void	*routine(void *arg)
 			pthread_mutex_lock(&philo->tools->forks[philo->right_fork]);
 			printer(philo, "has taken a fork");
 			printer(philo, "is eating");
-			ft_sleep(philo->tools->time_eat);
+
 			pthread_mutex_unlock(&philo->tools->forks[philo->right_fork]);
 			pthread_mutex_unlock(&philo->tools->forks[philo->left_fork]);
 			printer(philo, "is sleeping");

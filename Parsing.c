@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 23:30:08 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/14 22:37:06 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 23:22:10 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	init_philo(t_tools *tools)
 	tools->last_eat = malloc(sizeof(struct timeval) * tools->n_philos);
 	if (!tools->philo || !tools->last_eat)
 		return (1);
-	gettimeofday(&tools->t_start, 0);
 	while (i < tools->n_philos)
 	{
 		tools->philo[i].id = i + 1;
@@ -68,13 +67,14 @@ int	init_philo(t_tools *tools)
 		tools->philo[i].left_fork = i;
 		tools->philo[i].n_meal = 0;
 		tools->philo[i].died = 0;
-		gettimeofday(&tools->last_eat[i], 0);
+
 		if (i > 0)
 			tools->philo[i].right_fork = tools->philo[i - 1].id - 1;
 		else
 			tools->philo[i].right_fork = tools->n_philos - 1;
 		i++;
 	}
+	gettimeofday(&tools->t_start, 0);
 	return (0);
 }
 

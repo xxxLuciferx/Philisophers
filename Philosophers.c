@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/14 23:14:03 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/14 23:30:28 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ void	printer(t_philo *philo, char *line)
 	printf("%d %d %s\n", time_calcule(philo), philo->id, line);
 	if (line[3] == 'e')
 	{
-		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
 		pthread_mutex_lock(philo->tools->printing);
 		philo->n_meal++;
 		pthread_mutex_unlock(philo->tools->printing);
+		ft_sleep(philo->tools->time_eat);
+		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
 	}
 }
 
