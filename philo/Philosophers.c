@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 16:54:08 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 17:02:48 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ void	check_died(t_tools *tools)
 		{
 			pthread_mutex_lock(tools->printing);
 			make_all_dead(tools->philo);
-			printf("%d %d %s\n", time_calcule(tools->philo), tools->philo[i].id, "is died");
+			printf("%d %d %s\n", time_calcule(tools->philo), \
+			tools->philo[i].id, "is died");
 			return ;
 		}
 		i++;

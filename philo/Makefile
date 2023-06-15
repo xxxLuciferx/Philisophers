@@ -2,7 +2,7 @@ NAME = philo
 
 SRC = Philosophers.c Parsing.c routine.c tools.c
 
-CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=thread -g
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 OBJ = ${SRC:.c=.o}
 OBJ_BONUS = ${SRC_BONUS:.c=.o}
