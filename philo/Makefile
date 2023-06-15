@@ -1,7 +1,6 @@
 NAME = philo
 
-SRC = Philosophers.c Parsing.c routine.c dead_philo.c
-
+SRC = Philosophers.c Parsing.c routine.c tools.c
 
 CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=thread -g
 

@@ -6,7 +6,20 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 15:08:02 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 16:54:08 by khaimer          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Philosophers.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dead_philo.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 14:52:32 by khaimer           #+#    #+#             */
+/*   Updated: 2023/06/15 15:19:04 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +38,7 @@ void	ft_sleep(int time)
 					- start.tv_usec) / 1000) >= time)
 			break ;
 		gettimeofday(&end, NULL);
-		usleep(100);
+		usleep(200);
 	}
 }
 
@@ -42,14 +55,16 @@ int	time_calcule(t_philo *philo)
 
 void	printer(t_philo *philo, char *line)
 {
+	pthread_mutex_lock(philo->tools->printing);
 	printf("%d %d %s\n", time_calcule(philo), philo->id, line);
+	pthread_mutex_unlock(philo->tools->printing);
 	if (line[3] == 'e')
 	{
 		pthread_mutex_lock(philo->tools->printing);
 		philo->n_meal++;
 		pthread_mutex_unlock(philo->tools->printing);
-		ft_sleep(philo->tools->time_eat);
 		gettimeofday(&philo->tools->last_eat[philo->id - 1], 0);
+		ft_sleep(philo->tools->time_eat);
 	}
 }
 
@@ -58,7 +73,6 @@ void	check_died(t_tools *tools)
 	int	i;
 
 	i = 0;
-	usleep(5);
 	while (1)
 	{
 		pthread_mutex_lock(tools->printing);
@@ -68,8 +82,8 @@ void	check_died(t_tools *tools)
 		if (timer(&tools->philo[i]) >= tools->time_die)
 		{
 			pthread_mutex_lock(tools->printing);
-			printer(&tools->philo[i], "died");
 			make_all_dead(tools->philo);
+			printf("%d %d %s\n", time_calcule(tools->philo), tools->philo[i].id, "is died");
 			return ;
 		}
 		i++;

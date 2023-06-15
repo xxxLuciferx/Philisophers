@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dead_philo.c                                       :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 14:52:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 15:07:17 by khaimer          ###   ########.fr       */
+/*   Created: 2023/06/15 16:20:12 by khaimer           #+#    #+#             */
+/*   Updated: 2023/06/15 16:20:41 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	all_good(t_tools *tools)
 
 int	timer(t_philo *philo)
 {
-	struct timeval	time;
 	int				timing;
+	struct timeval	time;
 
 	gettimeofday(&time, 0);
 	timing = ((time.tv_sec * 1000) + (time.tv_usec / 1000))
