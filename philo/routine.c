@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 15:29:16 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/14 23:25:39 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 12:35:15 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
- 
 	if (philo->id % 2 == 1)
 	{
 		printer(philo, "is thinking");
@@ -37,8 +36,6 @@ void	*routine(void *arg)
 			ft_sleep(philo->tools->time_sleep);
 			printer(philo, "is thinking");
 			pthread_mutex_lock(philo->tools->death);
-			// if(philo->died == 1)
-			// 	return NULL;
 			pthread_mutex_unlock(philo->tools->death);
 	}
 	return (NULL);
