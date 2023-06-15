@@ -1,11 +1,9 @@
 NAME = philo
 
-SRC = Philosophers.c Parsing.c routine.c
+SRC = Philosophers.c Parsing.c routine.c dead_philo.c
 
 
-####### ADD FLAGS
-CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g
-# CFLAGS = -fsanitize=address -g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=thread -g
 
 OBJ = ${SRC:.c=.o}
 OBJ_BONUS = ${SRC_BONUS:.c=.o}

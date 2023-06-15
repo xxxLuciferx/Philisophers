@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/14 22:36:43 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 15:08:35 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,27 @@ typedef struct s_philo
 	struct timeval		t_now;
 }						t_philo;
 
+/* PARSING*/
 int						ft_atoi(char *str);
 int						parsing(int argc, char **argv, t_tools *philo);
 int						init_philo(t_tools *tools);
+int						one_philo(t_tools *tools);
 int						mutexes_and_threads(t_tools *tools);
+
+/*Philosophers*/
 void					ft_sleep(int time);
+int						time_calcule(t_philo *philo);
 void					printer(t_philo *philo, char *line);
 int						timer(t_philo *philo);
+void					p_join(t_tools *tools);
+
+/*dead_philo*/
+void					make_all_dead(t_philo *philo);
+int						all_good(t_tools *tools);
+int						timer(t_philo *philo);
+void					p_join(t_tools *tools);
+
+void					make_all_dead(t_philo *philo);
 void					check_died(t_tools *tools);
 void					*routine(void *arg);
 
