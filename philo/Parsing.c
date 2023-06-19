@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 23:30:08 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 15:07:37 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:57:20 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,6 @@ int	parsing(int argc, char **argv, t_tools *philo)
 	return (0);
 }
 
-int	one_philo(t_tools *tools)
-{
-	if (tools->n_philos == 1)
-	{
-		printf("0 1 is thinking\n");
-		printf("0 1 has taken a fork\n");
-		printf("%d 1 died\n", tools->time_die);
-		return (5);
-	}
-	return (0);
-}
-
 int	init_philo(t_tools *tools)
 {
 	int	i;
@@ -83,11 +71,10 @@ int	init_philo(t_tools *tools)
 			tools->philo[i].right_fork = tools->philo[i - 1].id - 1;
 		else
 			tools->philo[i].right_fork = tools->n_philos - 1;
+		gettimeofday(&tools->last_eat[i], 0);
 		i++;
 	}
 	gettimeofday(&tools->t_start, 0);
-	if (one_philo(tools) == 5)
-		return (1);
 	return (0);
 }
 

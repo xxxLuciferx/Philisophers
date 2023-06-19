@@ -6,20 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 17:02:48 by khaimer          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "Philosophers.h"
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   dead_philo.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 14:52:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 15:19:04 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/19 15:56:53 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +78,6 @@ void	check_died(t_tools *tools)
 		if (i == tools->n_philos)
 			i = 0;
 	}
-	p_join(tools);
 }
 
 int	main(int argc, char **argv)
@@ -106,5 +92,6 @@ int	main(int argc, char **argv)
 	if (init_philo(tools) || mutexes_and_threads(tools))
 		return (1);
 	check_died(tools);
+	mutex_destroy(tools);
 	return (0);
 }

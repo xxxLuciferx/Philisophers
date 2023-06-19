@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:16:32 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 15:08:35 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 17:26:09 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ int						all_good(t_tools *tools);
 int						timer(t_philo *philo);
 void					p_join(t_tools *tools);
 
+/*tools*/
 void					make_all_dead(t_philo *philo);
 void					check_died(t_tools *tools);
 void					*routine(void *arg);
+void					mutex_destroy(t_tools *tools);
 
 #endif

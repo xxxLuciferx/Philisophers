@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:20:12 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 16:59:42 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 17:26:07 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,11 @@ void	p_join(t_tools *tools)
 		pthread_join(tools->philo[i].thread, 0);
 		i++;
 	}
+}
+
+void	mutex_destroy(t_tools *tools)
+{
+	pthread_mutex_destroy(tools->forks);
+	pthread_mutex_destroy(tools->printing);
+	pthread_mutex_destroy(tools->death);
 }

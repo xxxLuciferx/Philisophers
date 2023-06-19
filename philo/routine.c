@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 15:29:16 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/15 16:17:20 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/15 17:40:05 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*routine(void *arg)
 	if (philo->id % 2 == 1)
 	{
 		printer(philo, "is thinking");
-		ft_sleep(philo->tools->time_sleep);
+		usleep(50);
 	}
 	while (1)
 	{
