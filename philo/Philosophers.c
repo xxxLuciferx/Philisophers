@@ -6,7 +6,7 @@
 /*   By: khaimer <khaimer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 19:09:48 by khaimer           #+#    #+#             */
-/*   Updated: 2023/06/19 15:56:53 by khaimer          ###   ########.fr       */
+/*   Updated: 2023/06/22 21:02:09 by khaimer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	ft_sleep(int time)
 	while (1)
 	{
 		if (((end.tv_sec - start.tv_sec) * 1000) + ((end.tv_usec
-					- start.tv_usec) / 1000) >= time)
+					- start.tv_usec) / 1000) == time)
 			break ;
 		gettimeofday(&end, NULL);
-		usleep(200);
+		usleep(150);
 	}
 }
 
